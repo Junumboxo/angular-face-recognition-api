@@ -48,6 +48,7 @@ export class FaceRecognitionService {
   private getParams() {
     const httpParams = new HttpParams()
       .set('returnFaceId', 'false')
+      .set('returnFaceLandmarks', 'true')
       .set(
         'returnFaceAttributes',
         'glasses'

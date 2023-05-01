@@ -23,7 +23,7 @@ export class DesktopCameraService {
     return mediaDevices;
   }
 
-  getPhoto(): Observable<string> {
+  takePhoto(): Observable<string> {
     return new Observable((observer: any) => {
       this.getMediaDevices()
         .getUserMedia({ video: true, audio: false })

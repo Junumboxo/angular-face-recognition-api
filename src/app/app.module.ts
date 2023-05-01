@@ -21,7 +21,6 @@ import { TableComponent } from './table/table.component';
   imports: [FormsModule, BrowserModule, HttpClientModule],
   providers: [
     DesktopCameraService,
-    DesktopCameraService,
     FaceRecognitionService,
   ],
   bootstrap: [AppComponent],
