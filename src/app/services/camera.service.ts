@@ -4,8 +4,8 @@ import { Injectable } from "@angular/core";
 declare const window: any;
 
 @Injectable()
-export class DesktopCameraService {
-  private getMediaDevices(): any {
+export class CameraService {
+  private getMedia(): any {
     const mediaDevices =
       (window.navigator.mozGetUserMedia || window.navigator.webkitGetUserMedia
         ? {
@@ -23,19 +23,19 @@ export class DesktopCameraService {
     return mediaDevices;
   }
 
-  takePhoto(): Observable<string> {
+  takeNewPhoto(): Observable<string> {
     return new Observable((observer: any) => {
-      this.getMediaDevices()
+      this.getMedia()
         .getUserMedia({ video: true, audio: false })
         .then(
           (stream: any) => {
-            const doc = document;
-            const videoElement = doc.createElement('video');
+            const docRef = document;
+            const videoElement = docRef.createElement('video');
             videoElement.srcObject = stream;
             videoElement.play();
 
             const takePhotoInternal = () => {
-              const canvasElement = doc.createElement('canvas');
+              const canvasElement = docRef.createElement('canvas');
               canvasElement.setAttribute(
                 'width',
                 videoElement.videoWidth.toString()

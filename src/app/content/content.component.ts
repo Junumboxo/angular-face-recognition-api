@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { FaceRecognitionService } from '../services/face-recognition.service';
 import { FaceRecognitionResponse } from '../models/face.model';
-import { DesktopCameraService } from '../services/desktop-camera.service';
+import { CameraService } from '../services/camera.service';
 
 @Component({
   selector: 'app-content',
@@ -16,9 +16,8 @@ export class ContentComponent {
   subscriptionKey = 'cb8352e994ab454f87f57ceddd16cb4b';
 
   constructor(
-
     private faceRecognitionService: FaceRecognitionService,
-    private cameraService: DesktopCameraService
+    private cameraService: CameraService
   ) {}
 
   takeImage() {
@@ -28,7 +27,7 @@ export class ContentComponent {
       return;
     }
 
-    this.faceApiResponse = this.cameraService.takePhoto().pipe(
+    this.faceApiResponse = this.cameraService.takeNewPhoto().pipe(
       switchMap((base64Image: string) => {
         this.imageString = base64Image;
         return this.faceRecognitionService.scanImage(

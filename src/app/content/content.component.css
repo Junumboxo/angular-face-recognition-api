@@ -21,7 +21,6 @@ button {
 }
 
 #loading{
-  display: none;
   z-index: 1;
   width: 70px;
   height: 70px;

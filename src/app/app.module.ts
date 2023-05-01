@@ -6,7 +6,7 @@ import { ContentComponent } from './content/content.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { FormsModule } from '@angular/forms';
 import { BoolToYesNoPipe } from './pipes/bool-to-yes-no/bool-to-yes-no.pipe';
-import { DesktopCameraService } from './services/desktop-camera.service';
+import { CameraService } from './services/camera.service';
 import { FaceRecognitionService } from './services/face-recognition.service';
 import { TableComponent } from './table/table.component';
 
@@ -20,7 +20,7 @@ import { TableComponent } from './table/table.component';
   ],
   imports: [FormsModule, BrowserModule, HttpClientModule],
   providers: [
-    DesktopCameraService,
+    CameraService,
     FaceRecognitionService,
   ],
   bootstrap: [AppComponent],
