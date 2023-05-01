@@ -16,11 +16,14 @@ export class ContentComponent {
   subscriptionKey = 'cb8352e994ab454f87f57ceddd16cb4b';
 
   constructor(
+
     private faceRecognitionService: FaceRecognitionService,
     private cameraService: DesktopCameraService
   ) {}
 
   takeImage() {
+    document.getElementById('loading').style.display = 'block';
+
     if (!this.subscriptionKey) {
       return;
     }
@@ -34,26 +37,30 @@ export class ContentComponent {
         );
       })
     );
+
+    document.getElementById('loading').style.display = 'none';
   }
 
   onFileChanged(event) {
+    document.getElementById('loading').style.display = 'block';
+
     var reader = new FileReader();
     var file:File = event.target.files[0];
 
     reader.onload = () => {
       this.imageString = reader.result as string;
+      this.faceApiResponse = this.faceRecognitionService.scanImage(
+        this.subscriptionKey,
+        this.imageString
+      )
     };
+
     reader.onerror = function(e) {
       console.log('Error : ' + e.type);
     };
 
     reader.readAsDataURL(file);
 
-    alert(this.imageString);
-
-  	return this.faceRecognitionService.scanImage(
-      this.subscriptionKey,
-      this.imageString
-    );
+    document.getElementById('loading').style.display = 'none';
   }
 }

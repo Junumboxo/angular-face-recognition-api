@@ -4,7 +4,34 @@ button {
 }
 
 .waiter {
-
 	font-size:25px;
 	text-align:center;
 }
+
+.sorry {
+	font-size:25px;
+	text-align:center;
+  color:red;
+  font-weight: bold;
+}
+
+.image {
+  width: 650px;
+  height: auto;
+}
+
+#loading{
+  display: none;
+  z-index: 1;
+  width: 70px;
+  height: 70px;
+  border: 16px solid #ffffff;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

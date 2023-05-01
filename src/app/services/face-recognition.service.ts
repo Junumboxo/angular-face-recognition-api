@@ -17,7 +17,7 @@ export class FaceRecognitionService {
       blob,
       {
         params,
-        headers,
+        headers
       }
     );
   }
@@ -48,9 +48,10 @@ export class FaceRecognitionService {
   private getParams() {
     const httpParams = new HttpParams()
       .set('returnFaceId', 'false')
+      .set('returnFaceLandmarks', 'false')
       .set(
         'returnFaceAttributes',
-        'glasses'
+        'glasses',
       );
 
     return httpParams;

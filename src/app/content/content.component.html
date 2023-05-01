@@ -1,5 +1,5 @@
 <main role="main">
-  <section class="jumbotron text-center">
+  <section class="jumbotron text-center m-0">
     <div class="container">
 
       <h1 class="jumbotron-heading">Face Detection with Microsoft Azure</h1>
@@ -7,24 +7,28 @@
       <form #f="ngForm">
         <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
 
-
         <button (click)="takeImage()" [disabled]="!f?.valid" class="btn btn-primary m-2">Take picture</button>
 
         <button (click)="fileInput.click()" [disabled]="!f?.valid" class="btn btn-primary m-2">Upload picture</button>
-      </form>
 
-      <p>
-        <button *ngIf="faceApiResponse | async" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-secondary m-2" data-toggle="modal" data-target="#exampleModal">
           See full reponse
         </button>
-      </p>
+      </form>
+
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border my-1" id="loading" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
 
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div *ngIf="faceApiResponse | async as response; else waiting">
 
+            <div *ngIf="(response | json) != '[]'; else no_face_found">
             <app-table [faceApiResponse]="response"></app-table>
-
+            </div>
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
@@ -44,16 +48,17 @@
                 </div>
               </div>
             </div>
+
           </div>
           <!-- End Modal -->
 
-          <ng-template #waiting><label class='waiter'>Waiting for the input</label></ng-template>
         </div>
-        <div class="col-md-6">
-          <img *ngIf="imageString" [src]="imageString" alt="imageString">
+        <ng-template #no_face_found><label class="sorry my-4">Sorry, no face found!</label></ng-template>
+        <ng-template #waiting><label class="waiter my-4">Waiting for the input</label></ng-template>
+        <div class="col-md-12">
+          <img class="image" *ngIf="imageString" [src]="imageString" alt="imageString">
         </div>
       </div>
-
     </div>
   </section>
 </main>
