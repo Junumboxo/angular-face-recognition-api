@@ -5,6 +5,9 @@ declare const window: any;
 
 @Injectable()
 export class CameraService {
+
+  /* returns mediaDevices object
+  which provides access to the user's camera and microphone. */
   private getMedia(): any {
     const mediaDevices =
       (window.navigator.mozGetUserMedia || window.navigator.webkitGetUserMedia
@@ -23,9 +26,11 @@ export class CameraService {
     return mediaDevices;
   }
 
+  /* returns and observable binary string of the image */
   takeNewPhoto(): Observable<string> {
     return new Observable((observer: any) => {
       this.getMedia()
+        // ask for permissions
         .getUserMedia({ video: true, audio: false })
         .then(
           (stream: any) => {
@@ -34,7 +39,7 @@ export class CameraService {
             videoElement.srcObject = stream;
             videoElement.play();
 
-            const takePhotoInternal = () => {
+            const collectStream = () => {
               const canvasElement = docRef.createElement('canvas');
               canvasElement.setAttribute(
                 'width',
@@ -44,6 +49,11 @@ export class CameraService {
                 'height',
                 videoElement.videoHeight.toString()
               );
+
+              /* Delaying capturing the photo
+              After the video is playing, a canvas is created to capture the image.
+              However, it takes time for the video to buffer and display correctly on the canvas - 500 ms
+              This delay gives the video enough time to buffer */
 
               setTimeout(() => {
                 const context = canvasElement.getContext('2d');
@@ -55,6 +65,7 @@ export class CameraService {
                   videoElement.videoHeight
                 );
 
+                // read the image from the canvas
                 const url = canvasElement.toDataURL('image/png');
 
                 videoElement.pause();
@@ -63,30 +74,22 @@ export class CameraService {
                   stream.stop();
                 }
 
-                if (stream.getAudioTracks) {
-                  stream.getAudioTracks().forEach((track: any) => {
-                    track.stop();
-                  });
-                }
-
-                if (stream.getVideoTracks) {
-                  stream.getVideoTracks().forEach((track: any) => {
-                    track.stop();
-                  });
-                }
-
+                // make the recorded string observable
                 observer.next(url);
                 observer.complete();
               }, 500);
             };
 
+            // if the video reader has enough data for a little in the future, take the picture
+            // reference: https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState
             if (videoElement.readyState >= videoElement.HAVE_FUTURE_DATA) {
-              takePhotoInternal();
+              collectStream();
             } else {
+              // wait until the video reader is available, and then take the picture
               videoElement.addEventListener(
                 'canplay',
                 function () {
-                  takePhotoInternal();
+                  collectStream();
                 },
                 false
               );

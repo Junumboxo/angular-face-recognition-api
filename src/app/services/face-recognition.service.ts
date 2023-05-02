@@ -48,7 +48,7 @@ export class FaceRecognitionService {
     return httpParams;
   }
 
-  /* wrapping the binary image to the uint8 type request body */
+  /* wrapping the binary image URL to the uint8 type request body */
   private getBlob(dataURL) {
     const BASE64_MARKER = ';base64,';
     const parts = dataURL.split(BASE64_MARKER);
