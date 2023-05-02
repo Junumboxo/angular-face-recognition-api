@@ -37,7 +37,7 @@ export class ContentComponent {
     );
   }
 
-  onFileChanged(event) {;
+  onFileChanged(event) {
     var reader = new FileReader();
     var file:File = event.target.files[0];
 
