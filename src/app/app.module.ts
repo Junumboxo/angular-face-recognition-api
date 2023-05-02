@@ -9,6 +9,8 @@ import { BoolToYesNoPipe } from './pipes/bool-to-yes-no/bool-to-yes-no.pipe';
 import { CameraService } from './services/camera.service';
 import { FaceRecognitionService } from './services/face-recognition.service';
 import { TableComponent } from './table/table.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,7 @@ import { TableComponent } from './table/table.component';
     BoolToYesNoPipe,
     TableComponent,
   ],
-  imports: [FormsModule, BrowserModule, HttpClientModule],
+  imports: [FormsModule, MatButtonModule, BrowserModule, MatProgressSpinnerModule, HttpClientModule],
   providers: [
     CameraService,
     FaceRecognitionService,

@@ -1,6 +1,5 @@
 button {
-	font-size: 25px;
-	padding: 15px;
+	font-size: 18px;
 }
 
 .waiter {
@@ -19,18 +18,3 @@ button {
   width: 650px;
   height: auto;
 }
-
-#loading{
-  z-index: 1;
-  width: 70px;
-  height: 70px;
-  border: 16px solid #ffffff;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  animation: spin 2s linear infinite;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }

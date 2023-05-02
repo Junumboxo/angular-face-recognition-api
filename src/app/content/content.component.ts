@@ -14,6 +14,7 @@ export class ContentComponent {
   imageString = '';
   faceApiResponse: Observable<FaceRecognitionResponse>;
   subscriptionKey = 'cb8352e994ab454f87f57ceddd16cb4b';
+  loading = false;
 
   constructor(
     private faceRecognitionService: FaceRecognitionService,
@@ -21,12 +22,7 @@ export class ContentComponent {
   ) {}
 
   takeImage() {
-    document.getElementById('loading').style.display = 'block';
-
-    if (!this.subscriptionKey) {
-      return;
-    }
-
+    this.loading = true;
     this.faceApiResponse = this.cameraService.takeNewPhoto().pipe(
       switchMap((base64Image: string) => {
         this.imageString = base64Image;
@@ -36,13 +32,11 @@ export class ContentComponent {
         );
       })
     );
-
-    document.getElementById('loading').style.display = 'none';
+    this.loading = false;
   }
 
   onFileChanged(event) {
-    document.getElementById('loading').style.display = 'block';
-
+    this.loading = true;
     var reader = new FileReader();
     var file:File = event.target.files[0];
 
@@ -59,7 +53,6 @@ export class ContentComponent {
     };
 
     reader.readAsDataURL(file);
-
-    document.getElementById('loading').style.display = 'none';
+    this.loading = false;
   }
 }

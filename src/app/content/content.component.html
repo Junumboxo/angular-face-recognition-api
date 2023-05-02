@@ -4,23 +4,19 @@
 
       <h1 class="jumbotron-heading">Face Detection with Microsoft Azure</h1>
       <p class="lead text-muted">This demo uses Angular to take or upload a photo, and make a request to the Microsoft Face API for detection</p>
-      <form #f="ngForm">
+      <form #f="ngForm" class="my-3">
         <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
 
-        <button (click)="takeImage()" [disabled]="!f?.valid" class="btn btn-primary m-2">Take picture</button>
+        <button (click)="takeImage()" [disabled]="!f?.valid" mat-raised-button color="primary" class="py-3 m-1">Take picture</button>
 
-        <button (click)="fileInput.click()" [disabled]="!f?.valid" class="btn btn-primary m-2">Upload picture</button>
+        <button (click)="fileInput.click()" [disabled]="!f?.valid" mat-raised-button color="primary" class="py-3 m-1">Upload picture</button>
 
-        <button type="button" class="btn btn-secondary m-2" data-toggle="modal" data-target="#exampleModal">
+        <button mat-raised-button color="accent" data-toggle="modal" data-target="#exampleModal">
           See full reponse
         </button>
       </form>
 
-      <div class="d-flex justify-content-center">
-        <div class="spinner-border my-1" id="loading" role="status">
-            <span class="sr-only"></span>
-        </div>
-      </div>
+      <div class="row" style="display: flex; justify-content: center; align-items: center;"><mat-spinner *ngIf="loading"></mat-spinner></div>
 
       <div class="row">
         <div class="col-md-12">
@@ -29,7 +25,7 @@
             <div *ngIf="(response | json) != '[]'; else no_face_found">
             <app-table [faceApiResponse]="response"></app-table>
             </div>
-            <!-- Modal -->
+
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -48,9 +44,7 @@
                 </div>
               </div>
             </div>
-
           </div>
-          <!-- End Modal -->
 
         </div>
         <ng-template #no_face_found><label class="sorry my-4">Sorry, no face found!</label></ng-template>
