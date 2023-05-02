@@ -16,8 +16,6 @@
         </button>
       </form>
 
-      <div class="row" style="display: flex; justify-content: center; align-items: center;"><mat-spinner *ngIf="loading"></mat-spinner></div>
-
       <div class="row">
         <div class="col-md-12">
           <div *ngIf="faceApiResponse | async as response; else waiting">
@@ -30,7 +28,7 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Full reponse from FaceAPI</h5>
+                    <h3 class="modal-title" id="exampleModalLabel">Full reponse from FaceAPI</h3>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -39,7 +37,7 @@
                     <pre>{{response | json}}</pre>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button mat-raised-button color="accent" data-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
@@ -48,7 +46,7 @@
 
         </div>
         <ng-template #no_face_found><label class="sorry my-4">Sorry, no face found!</label></ng-template>
-        <ng-template #waiting><label class="waiter my-4">Waiting for the input</label></ng-template>
+        <ng-template #waiting><div class="row" style="display: flex; justify-content: center; align-items: center;"><mat-spinner></mat-spinner></div><label class="waiter my-4">Waiting for the input</label></ng-template>
         <div class="col-md-12">
           <img class="image" *ngIf="imageString" [src]="imageString" alt="imageString">
         </div>
