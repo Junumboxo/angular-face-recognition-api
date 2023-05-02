@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
+  /* reigstered compnents */
   declarations: [
     AppComponent,
     NavigationComponent,
@@ -20,11 +21,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     BoolToYesNoPipe,
     TableComponent,
   ],
+  /* imports used globally */
   imports: [FormsModule, MatButtonModule, BrowserModule, MatProgressSpinnerModule, HttpClientModule],
   providers: [
     CameraService,
     FaceRecognitionService,
   ],
+  /* entry component */
   bootstrap: [AppComponent],
 })
 export class AppModule {}

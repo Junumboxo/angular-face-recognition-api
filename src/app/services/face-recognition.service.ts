@@ -7,10 +7,12 @@ import { FaceRecognitionResponse } from '../models/face.model';
 export class FaceRecognitionService {
   constructor(private httpClient: HttpClient) {}
 
-  scanImage(subscriptionKey: string, base64Image: string) {
+  /* POST request to the Microsoft Face API endpoint
+  The URL of the endpoint is set in the environment.ts */
+  sendImage(subscriptionKey: string, base64Image: string) {
     const headers = this.getHeaders(subscriptionKey);
     const params = this.getParams();
-    const blob = this.makeblob(base64Image);
+    const blob = this.getBlob(base64Image);
 
     return this.httpClient.post<FaceRecognitionResponse>(
       environment.endpoint,
@@ -22,7 +24,32 @@ export class FaceRecognitionService {
     );
   }
 
-  private makeblob(dataURL) {
+  /* creating HTTP headers */
+  private getHeaders(subscriptionKey: string) {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/octet-stream');
+    headers = headers.set('Ocp-Apim-Subscription-Key', subscriptionKey);
+
+    return headers;
+  }
+
+  /* creating query parameters
+  e.g. .../detect?returnFaceId=false&returnFaceAttributes=glasses
+  unfortunately microsoft disabled the gender, age and emotions parameters for public use
+  because of privacy considerations */
+  private getParams() {
+    const httpParams = new HttpParams()
+      .set('returnFaceId', 'false')
+      .set('returnFaceLandmarks', 'false')
+      .set(
+        'returnFaceAttributes',
+        'glasses',
+      );
+    return httpParams;
+  }
+
+  /* wrapping the binary image to the uint8 type request body */
+  private getBlob(dataURL) {
     const BASE64_MARKER = ';base64,';
     const parts = dataURL.split(BASE64_MARKER);
     const contentType = parts[0].split(':')[1];
@@ -35,25 +62,5 @@ export class FaceRecognitionService {
     }
 
     return new Blob([uInt8Array], { type: contentType });
-  }
-
-  private getHeaders(subscriptionKey: string) {
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'application/octet-stream');
-    headers = headers.set('Ocp-Apim-Subscription-Key', subscriptionKey);
-
-    return headers;
-  }
-
-  private getParams() {
-    const httpParams = new HttpParams()
-      .set('returnFaceId', 'false')
-      .set('returnFaceLandmarks', 'false')
-      .set(
-        'returnFaceAttributes',
-        'glasses',
-      );
-
-    return httpParams;
   }
 }

@@ -5,25 +5,27 @@
       <h1 class="jumbotron-heading">Face Detection with Microsoft Azure</h1>
       <p class="lead text-muted">This demo uses Angular to take or upload a photo, and make a request to the Microsoft Face API for detection</p>
       <form #f="ngForm" class="my-3">
+        <!--File picker-->
         <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
-
+        <!--Take picture button-->
         <button (click)="takeImage()" [disabled]="!f?.valid" mat-raised-button color="primary" class="py-3 m-1">Take picture</button>
-
+        <!--Upload picture button-->
         <button (click)="fileInput.click()" [disabled]="!f?.valid" mat-raised-button color="primary" class="py-3 m-1">Upload picture</button>
-
-        <button mat-raised-button color="accent" data-toggle="modal" data-target="#exampleModal">
-          See full reponse
-        </button>
+        <!--Detailed API response button-->
+        <button mat-raised-button color="accent" [disabled]="!faceApiResponse" data-toggle="modal" data-target="#exampleModal">See full reponse</button>
       </form>
 
       <div class="row">
         <div class="col-md-12">
+          <!--The following section is displayed in case of a request, otherwise the waiting section is displayed-->
           <div *ngIf="faceApiResponse | async as response; else waiting">
 
+            <!--If the response body is empty, no face found, ohterwise display response as a table-->
             <div *ngIf="(response | json) != '[]'; else no_face_found">
             <app-table [faceApiResponse]="response"></app-table>
             </div>
 
+            <!--Detailed API response modal-->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -42,11 +44,20 @@
                 </div>
               </div>
             </div>
+             <!--End modal-->
           </div>
-
         </div>
+
+        <!--No face found template-->
         <ng-template #no_face_found><label class="sorry my-4">Sorry, no face found!</label></ng-template>
-        <ng-template #waiting><div class="row" style="display: flex; justify-content: center; align-items: center;"><mat-spinner></mat-spinner></div><label class="waiter my-4">Waiting for the input</label></ng-template>
+        <!--Waiting template with a spinner-->
+        <ng-template #waiting>
+          <div class="row my-3" style="display: flex; justify-content: center; align-items: center;">
+            <mat-spinner></mat-spinner>
+          </div>
+        </ng-template>
+
+        <!--Taken/uploaded image displayed here-->
         <div class="col-md-12">
           <img class="image" *ngIf="imageString" [src]="imageString" alt="imageString">
         </div>
