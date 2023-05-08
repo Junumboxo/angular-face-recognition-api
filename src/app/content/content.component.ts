@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { finalize, map, switchMap, tap } from 'rxjs/operators';
 import { FaceRecognitionService } from '../services/face-recognition.service';
 import { FaceRecognitionResponse } from '../models/face.model';
 import { CameraService } from '../services/camera.service';
@@ -19,12 +19,15 @@ export class ContentComponent {
   /* Microsoft Face API access key - change to yours! */
   subscriptionKey = 'cb8352e994ab454f87f57ceddd16cb4b';
 
+  loading$ = new BehaviorSubject(false);
+
   constructor(
     private faceRecognitionService: FaceRecognitionService,
     private cameraService: CameraService
   ) {}
 
   takeImage() {
+    this.loading$.next(true);
     this.faceApiResponse = this.cameraService.takeNewPhoto().pipe(
       switchMap((base64Image: string) => {
         this.imageString = base64Image;
@@ -32,8 +35,16 @@ export class ContentComponent {
         return this.faceRecognitionService.sendImage(
           this.subscriptionKey,
           base64Image
+        ).pipe(
+          map((result: any) => {
+            if (result.length === 0){
+              this.openNoFaceModal();
+            }
+            return result;
+          })
         );
-      })
+      }),
+      finalize(() => this.loading$.next(false))
     );
   }
 
@@ -48,14 +59,30 @@ export class ContentComponent {
       this.faceApiResponse = this.faceRecognitionService.sendImage(
         this.subscriptionKey,
         this.imageString
-      )
+      ).pipe(
+          map((result: any) => {
+            if (result.length === 0){
+              this.openNoFaceModal();
+            }
+            return result;
+          }),
+          finalize(() => this.loading$.next(false))
+        );
     };
 
-    reader.onerror = function(e) {
+    reader.onerror = (e) => {
       alert('Error : ' + e.type);
+      this.imageString = '';
+      this.loading$.next(false);
     };
 
     //async reading
     reader.readAsDataURL(file);
+    this.loading$.next(true);
+  }
+
+  openNoFaceModal() {
+    const button = document.getElementById('noFaceModalButton');
+    button.click();
   }
 }

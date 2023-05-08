@@ -12,17 +12,25 @@
         <!--Upload picture button-->
         <button (click)="fileInput.click()" [disabled]="!f?.valid" mat-raised-button color="primary" class="py-3 m-1">Upload picture</button>
         <!--Detailed API response button-->
-        <button mat-raised-button color="accent" [disabled]="!faceApiResponse" data-toggle="modal" data-target="#exampleModal">See full reponse</button>
+        <button mat-raised-button color="accent" [disabled]="!faceApiResponse || (loading$ | async)" data-toggle="modal" data-target="#exampleModal">See full reponse</button>
       </form>
 
       <div class="row">
         <div class="col-md-12">
+          <!-- show the loader when loading is true -->
+           <div *ngIf="(loading$ | async)" class="row my-3" style="display: flex; justify-content: center; align-items: center;">
+              <mat-spinner></mat-spinner>
+            </div>
           <!--The following section is displayed in case of a request, otherwise the waiting section is displayed-->
-          <div *ngIf="faceApiResponse | async as response; else waiting">
-
+          <div *ngIf="faceApiResponse | async as response;">
             <!--If the response body is empty, no face found, ohterwise display response as a table-->
             <div *ngIf="(response | json) != '[]'; else no_face_found">
-            <app-table [faceApiResponse]="response"></app-table>
+              <ul>
+                <li *ngFor="let face of response; let i = index">
+                  <h3> Face {{ i + 1 }}</h3>
+                  <app-table [faceApiResponse]="face"></app-table>
+                </li>
+              </ul>
             </div>
 
             <!--Detailed API response modal-->
@@ -49,14 +57,7 @@
         </div>
 
         <!--No face found template-->
-        <ng-template #no_face_found><label class="sorry my-4">Sorry, no face found!</label></ng-template>
-        <!--Waiting template with a spinner-->
-        <ng-template #waiting>
-          <div class="row my-3" style="display: flex; justify-content: center; align-items: center;">
-            <mat-spinner></mat-spinner>
-          </div>
-        </ng-template>
-
+        <ng-template #no_face_found></ng-template>
         <!--Taken/uploaded image displayed here-->
         <div class="col-md-12">
           <img class="image" *ngIf="imageString" [src]="imageString" alt="imageString">
@@ -65,3 +66,22 @@
     </div>
   </section>
 </main>
+
+<!--No face found Modal -->
+<button id="noFaceModalButton" data-toggle="modal" style="display: none;" data-target="#noFaceModal"></button>
+<div class="modal fade" id="noFaceModal" tabindex="-1" role="dialog" aria-labelledby="noFaceModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h2 aria-hidden="true">Oops!</h2>
+      </div>
+      <div class="modal-body text-sm-left sorry">
+        Sorry, no face found!
+      </div>
+      <div class="modal-footer">
+        <button mat-raised-button color="accent" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End modal-->
