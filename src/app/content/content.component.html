@@ -25,10 +25,10 @@
           <div *ngIf="faceApiResponse | async as response;">
             <!--If the response body is empty, no face found, ohterwise display response as a table-->
             <div *ngIf="(response | json) != '[]'; else no_face_found">
-              <ul>
+              <ul style="list-style-type: none">
                 <li *ngFor="let face of response; let i = index">
-                  <h3> Face {{ i + 1 }}</h3>
-                  <app-table [faceApiResponse]="face"></app-table>
+                  <h3 style="text-align:left"> Face {{ i + 1 }}</h3>
+                  <app-table [faceApiResponse]="response"></app-table>
                 </li>
               </ul>
             </div>
