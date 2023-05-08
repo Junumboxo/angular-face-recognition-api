@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col-md-12">
           <!-- show the loader when loading is true -->
-           <div *ngIf="(loading$ | async)" class="row my-3" style="display: flex; justify-content: center; align-items: center;">
+            <div *ngIf="(loading$ | async)" class="row my-3" style="display: flex; justify-content: center; align-items: center;">
               <mat-spinner></mat-spinner>
             </div>
           <!--The following section is displayed in case of a request, otherwise the waiting section is displayed-->
@@ -26,6 +26,7 @@
             <!--If the response body is empty, no face found, ohterwise display response as a table-->
             <div *ngIf="(response | json) != '[]'; else no_face_found">
               <ul style="list-style-type: none">
+                <!--For every face detected, display a separate result table -->
                 <li *ngFor="let face of response; let i = index">
                   <h3 style="text-align:left"> Face {{ i + 1 }}</h3>
                   <app-table [faceApiResponse]="response"></app-table>

@@ -18,7 +18,7 @@ export class ContentComponent {
   faceApiResponse: Observable<FaceRecognitionResponse>;
   /* Microsoft Face API access key - change to yours! */
   subscriptionKey = 'cb8352e994ab454f87f57ceddd16cb4b';
-
+  /* Spinning bar */
   loading$ = new BehaviorSubject(false);
 
   constructor(
@@ -81,6 +81,7 @@ export class ContentComponent {
     this.loading$.next(true);
   }
 
+  /* Open the modal that displays "Sorry, no face found" message */
   openNoFaceModal() {
     const button = document.getElementById('noFaceModalButton');
     button.click();
