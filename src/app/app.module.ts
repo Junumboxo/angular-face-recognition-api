@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { BoolToYesNoPipe } from './pipes/bool-to-yes-no/bool-to-yes-no.pipe';
 import { CameraService } from './services/camera.service';
 import { FaceRecognitionService } from './services/face-recognition.service';
+import { DrawingService } from './services/drawing.service';
 import { TableComponent } from './table/table.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -26,6 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   providers: [
     CameraService,
     FaceRecognitionService,
+    DrawingService
   ],
   /* entry component */
   bootstrap: [AppComponent],
