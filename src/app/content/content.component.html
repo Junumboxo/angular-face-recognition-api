@@ -61,7 +61,7 @@
         <ng-template #no_face_found></ng-template>
         <!--Taken/uploaded image displayed here-->
         <div class="col-md-12">
-          <img class="image" *ngIf="imageString" [src]="imageString" alt="imageString">
+          <canvas id="imgCanvas" width="650px" height="400px"></canvas>
         </div>
       </div>
     </div>

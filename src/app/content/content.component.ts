@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, map, switchMap, tap } from 'rxjs/operators';
 import { FaceRecognitionService } from '../services/face-recognition.service';
 import { FaceRecognitionResponse } from '../models/face.model';
@@ -61,13 +61,32 @@ export class ContentComponent {
         this.imageString
       ).pipe(
           map((result: any) => {
-            if (result.length === 0){
+            if (result.length === 0) {
               this.openNoFaceModal();
             }
             return result;
           }),
           finalize(() => this.loading$.next(false))
         );
+
+      var canvas = <HTMLCanvasElement> document.getElementById("imgCanvas");
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var img = new Image();
+      img.src = this.imageString;
+
+      img.onload = () => {
+        ctx.drawImage(img, 0,0, img.width, img.height, 0, 0, 650, img.height * 650/img.width);
+        this.faceApiResponse.pipe(tap(face => {
+            ctx.rect(face.faceRectangle.left * 650/img.width,
+            face.faceRectangle.top * 650/img.width,
+            face.faceRectangle.width * 650/img.width,
+            face.faceRectangle.height * 650/img.width);
+            ctx.strokeStyle="#00ff00";
+            ctx.stroke();
+            alert("here");
+        })).subscribe(_ => console.log("canvas populated with rectangles"));
+      }
     };
 
     reader.onerror = (e) => {
